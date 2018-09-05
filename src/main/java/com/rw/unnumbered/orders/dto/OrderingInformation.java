@@ -69,8 +69,11 @@ public class OrderingInformation {
     @DecimalMax("10000.0") @DecimalMin("0.0")
     private double ticketPrice;
 
-    @ApiModelProperty(example = "2", required = false, value = "Количество поездок, ", dataType = "int")
+    @ApiModelProperty(example = "2", required = false, value = "Количество поездок", dataType = "int")
     @Max(100)
     @Builder.Default
     private int tripCount = 1;
+
+    @ApiModelProperty(required = true, value = "Данные о пассажире")
+    private Passenger passenger;
 }

@@ -2,6 +2,7 @@ package com.rw.unnumbered.orders.controllers;
 
 import com.rw.unnumbered.orders.dto.Order;
 import com.rw.unnumbered.orders.dto.OrderingInformation;
+import com.rw.unnumbered.orders.dto.Ticket;
 import com.rw.unnumbered.orders.service.OrderService;
 import com.rw.unnumbered.orders.validator.OrderingInformationValidator;
 import io.swagger.annotations.*;
@@ -37,7 +38,7 @@ public class OrderController extends BaseController {
     @RequestMapping(method = RequestMethod.POST, path = "/activate")
     @ApiOperation(value = "Активировать ЭПД")
     @ResponseStatus(HttpStatus.CREATED)
-    public long activateTicket(@RequestParam(value = "orderId") @ApiParam(example = "1", value = "Уникальный идентификатор заказа", required = true) long orderId, @RequestParam @ApiParam(example = "2018-01-20", value = "Дата поездки", required = true) Date date, @RequestParam @ApiParam(example = "001А") String train) {
+    public Ticket activateTicket(@RequestParam(value = "orderId") @ApiParam(example = "1", value = "Уникальный идентификатор заказа", required = true) long orderId, @RequestParam @ApiParam(example = "2018-01-20", value = "Дата поездки", required = true) Date date, @RequestParam @ApiParam(example = "001А") String train) {
         return orderService.activateTicket(orderId, date, train);
     }
 
@@ -70,8 +71,14 @@ public class OrderController extends BaseController {
                             @ResponseHeader(name = "ETag", response = String.class, description = "Хеш для кэширования")}),
             @ApiResponse(code = 304, message = "Not Modified")
     })
-    public List<Order> getOrders(@RequestParam @ApiParam(value="Фильтр для получения списка заказов пользователя. Значение: пусто - все заказы, upcoming - заказы с предстоящими поездками, past - заказы с прошедшими поездками", example = "past", defaultValue = "upcoming", allowableValues = "upcoming, past, returned") String filter, @RequestHeader(name="IF-NONE-MATCH", required = false) @ApiParam(name="IF-NONE-MATCH", value = "ETag из предыдущего закэшированного запроса") String inm) {
-        return orderService.getOrders(filter);
+    public List<Order> getOrders(@RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов пользователя по типу заказа. Значение: пусто - все заказы, upcoming - заказы с предстоящими поездками, past - заказы с прошедшими поездками", example = "past", defaultValue = "upcoming", allowableValues = "upcoming, past") String orderType,
+                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с датой отправления больше либо равно указанной", example = "2018-11-12") Date departureDateMin,
+                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с датой отправления меньше либо равно указанной", example = "2018-11-22") Date departureDateMax,
+                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с указанным поездом", example = "2018-11-22") String train,
+                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с указанной станцией отправления", example = "2100276") String departureStationCode,
+                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с указанной станцией прибытия", example = "2100276") String arrivalStationCode,
+                                 @RequestHeader(name="IF-NONE-MATCH", required = false) @ApiParam(name="IF-NONE-MATCH", value = "ETag из предыдущего закэшированного запроса") String inm) {
+        return orderService.getOrders(orderType ,departureDateMin, departureDateMax, train, departureStationCode, arrivalStationCode);
     }
 
 }

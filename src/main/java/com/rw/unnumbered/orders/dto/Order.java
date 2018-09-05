@@ -8,10 +8,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @ApiModel(description = "Информация о заказе пользователя")
 public class Order {
+
+    @ApiModelProperty(example = "12345", required = true, value = "Идентификатор заказа)", dataType = "long")
+    private long orderId;
 
     @ApiModelProperty(example = "74835926988082", required = false, value = "Идентификатор корзины", dataType = "String")
     private String basketId;
@@ -47,15 +51,19 @@ public class Order {
     private String privilegeType;
 
     @ApiModelProperty(example = "12.12", required = true, value = "Сумма заказа", dataType = "double")
-    @DecimalMax("10000.0") @DecimalMin("0.0")
     private double cost;
 
     @ApiModelProperty(example = "12.12", required = true, value = "Стоимость ЭПД", dataType = "double")
-    @DecimalMax("10000.0") @DecimalMin("0.0")
     private double ticketPrice;
 
-    @ApiModelProperty(example = "2", required = false, value = "Количество поездок, ", dataType = "int")
+    @ApiModelProperty(example = "2", required = true, value = "Количество поездок", dataType = "int")
     private int tripCount;
 
+    @ApiModelProperty(example = "2", required = true, value = "Количество активированных поездок (количество ЭПД)", dataType = "int")
+    private int activatedTripCount;
 
+    @ApiModelProperty(required = true, value = "Данные о пассажире")
+    private Passenger passenger;
+
+    private List<Ticket> tickets;
 }
