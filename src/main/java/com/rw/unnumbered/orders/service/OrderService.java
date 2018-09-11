@@ -41,8 +41,8 @@ public class OrderService {
         return new Order();
     }
 
-    public List<Order> getOrders(@Valid @Size(max = 30) String orderType , @Valid Date departureDateMin, @Valid Date departureDateMax, @Valid @Max(6) String train,
-                                 @Valid @Max(8) String departureStationCode, @Valid @Max(8) String  arrivalStationCode) {
+    public List<Order> getOrders(@Valid @Size(max = 30) String orderType , @Valid Date departureDateMin, @Valid Date departureDateMax, @Valid @Size( max=6) String train,
+                                 @Valid @Size( max=8) String departureStationCode, @Valid @Size( max=8) String  arrivalStationCode) {
         return orderDao.getOrders(orderType ,departureDateMin, departureDateMax, train, departureStationCode, arrivalStationCode);
     }
 

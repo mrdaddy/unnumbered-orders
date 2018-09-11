@@ -7,6 +7,7 @@ import com.rw.unnumbered.orders.service.OrderService;
 import com.rw.unnumbered.orders.validator.OrderingInformationValidator;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.WebDataBinder;
@@ -29,28 +30,30 @@ public class OrderController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @ApiOperation(value = "Создание нового заказа")
+    @ApiOperation(value = "Создание нового заказа", authorizations = @Authorization("jwt-auth"))
     @ResponseStatus( HttpStatus.CREATED)
     public Order createOrder(@RequestBody @ApiParam OrderingInformation orderingInformation) {
         return orderService.createOrder(orderingInformation);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/activate")
-    @ApiOperation(value = "Активировать ЭПД")
+    @ApiOperation(value = "Активировать ЭПД", authorizations = @Authorization("jwt-auth"))
     @ResponseStatus(HttpStatus.CREATED)
-    public Ticket activateTicket(@RequestParam(value = "orderId") @ApiParam(example = "1", value = "Уникальный идентификатор заказа", required = true) long orderId, @RequestParam @ApiParam(example = "2018-01-20", value = "Дата поездки", required = true) Date date, @RequestParam @ApiParam(example = "001А") String train) {
+    public Ticket activateTicket(@RequestParam(value = "orderId") @ApiParam(example = "1", value = "Уникальный идентификатор заказа", required = true) long orderId,
+                                 @RequestParam @ApiParam(example = "2018-01-20", value = "Дата поездки", required = true)  @DateTimeFormat(pattern="yyyy-dd-MM") Date date,
+                                 @RequestParam @ApiParam(example = "001А") String train) {
         return orderService.activateTicket(orderId, date, train);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{orderId}")
-    @ApiOperation(value = "Удаление неоплаченного заказа из корзины с аннулированием в системе ЭПД")
+    @ApiOperation(value = "Удаление неоплаченного заказа из корзины с аннулированием в системе ЭПД", authorizations = @Authorization("jwt-auth"))
     @ResponseStatus( HttpStatus.ACCEPTED)
     public void deleteOrder(@PathVariable("orderId") @ApiParam(value="Уникальный идентификатор заказа", example = "1") long orderId) {
         orderService.deleteOrder(orderId);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{orderId}")
-    @ApiOperation(value = "Получение информации о заказе пользователя")
+    @ApiOperation(value = "Получение информации о заказе пользователя", authorizations = @Authorization("jwt-auth"))
     @ResponseStatus( HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK",
@@ -63,7 +66,7 @@ public class OrderController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    @ApiOperation(value = "Получение информации о заказах пользователя")
+    @ApiOperation(value = "Получение информации о заказах пользователя", authorizations = @Authorization("jwt-auth"))
     @ResponseStatus( HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK",
@@ -72,9 +75,9 @@ public class OrderController extends BaseController {
             @ApiResponse(code = 304, message = "Not Modified")
     })
     public List<Order> getOrders(@RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов пользователя по типу заказа. Значение: пусто - все заказы, upcoming - заказы с предстоящими поездками, past - заказы с прошедшими поездками", example = "past", defaultValue = "upcoming", allowableValues = "upcoming, past") String orderType,
-                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с датой отправления больше либо равно указанной", example = "2018-11-12") Date departureDateMin,
-                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с датой отправления меньше либо равно указанной", example = "2018-11-22") Date departureDateMax,
-                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с указанным поездом", example = "2018-11-22") String train,
+                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с датой отправления больше либо равно указанной", example = "2018-11-12")  @DateTimeFormat(pattern="yyyy-dd-MM") Date departureDateMin,
+                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с датой отправления меньше либо равно указанной", example = "2018-11-22")  @DateTimeFormat(pattern="yyyy-dd-MM") Date departureDateMax,
+                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с указанным поездом", example = "001А")String train,
                                  @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с указанной станцией отправления", example = "2100276") String departureStationCode,
                                  @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с указанной станцией прибытия", example = "2100276") String arrivalStationCode,
                                  @RequestHeader(name="IF-NONE-MATCH", required = false) @ApiParam(name="IF-NONE-MATCH", value = "ETag из предыдущего закэшированного запроса") String inm) {
