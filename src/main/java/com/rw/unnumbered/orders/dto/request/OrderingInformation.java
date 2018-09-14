@@ -1,10 +1,12 @@
 package com.rw.unnumbered.orders.dto.request;
 
-import com.rw.unnumbered.orders.dto.Passenger;
+import com.rw.unnumbered.orders.dto.passenger.Passenger;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
@@ -13,6 +15,8 @@ import java.util.Date;
 @Data
 @Builder
 @ApiModel(description = "Данные для создания заказа о поездке и пассажирах")
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderingInformation {
     public enum DIRECTION {THERE, BACK}
     public enum TRAIN_TYPE {REG_LINE, CITY_LINE}

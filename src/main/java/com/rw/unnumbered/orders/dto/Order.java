@@ -1,15 +1,20 @@
 package com.rw.unnumbered.orders.dto;
 
+import com.rw.unnumbered.orders.dto.passenger.Passenger;
 import com.rw.unnumbered.orders.dto.request.OrderingInformation;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
 @ApiModel(description = "Информация о заказе пользователя")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
 
     @ApiModelProperty(example = "12345", required = true, value = "Идентификатор заказа)", dataType = "long")

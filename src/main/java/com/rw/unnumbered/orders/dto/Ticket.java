@@ -2,12 +2,16 @@ package com.rw.unnumbered.orders.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
 @ApiModel(description = "Информация об ЭПД")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ticket {
     @ApiModelProperty(example = "12345", required = true, value = "Идентификатор заказа", dataType = "long")
     private long ticketId;
