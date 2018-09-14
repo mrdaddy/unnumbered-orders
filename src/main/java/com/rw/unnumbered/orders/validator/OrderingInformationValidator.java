@@ -1,6 +1,6 @@
 package com.rw.unnumbered.orders.validator;
 
-import com.rw.unnumbered.orders.dto.OrderingInformation;
+import com.rw.unnumbered.orders.dto.request.OrderingInformation;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

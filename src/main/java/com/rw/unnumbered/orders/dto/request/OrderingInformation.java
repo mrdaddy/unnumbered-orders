@@ -1,5 +1,6 @@
-package com.rw.unnumbered.orders.dto;
+package com.rw.unnumbered.orders.dto.request;
 
+import com.rw.unnumbered.orders.dto.Passenger;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -17,7 +18,7 @@ public class OrderingInformation {
     public enum TRAIN_TYPE {REG_LINE, CITY_LINE}
     public enum TICKET_TYPE {FULL, PRIVILEGE, FREE, BAGGAGE}
 
-    @ApiModelProperty(example = "74835926988082", required = false, value = "Идентификатор корзины, куда добавить заказ (если первый заказ заполнять не нужно)", dataType = "String")
+    @ApiModelProperty(example = "74835926988082", required = false, value = "Идентификатор корзины, куда добавить заказ (необязательный, система сможет автоматически вычислить действующую активную корзину, если она есть)", dataType = "String")
     @Size(max=20)
     private String basketId;
 

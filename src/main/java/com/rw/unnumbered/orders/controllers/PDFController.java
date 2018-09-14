@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Api(value="tickets/pdf", description="Сервис получения получения ЭПД в виде PDF-представления", tags = "Получение ЭПД в виде PDF-представления", basePath="/tickets/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
 @RequestMapping(path = "/${service.version}/unnumbered/orders")
+@PreAuthorize("hasRole('U')")
 public class PDFController extends BaseController {
 
     @Autowired

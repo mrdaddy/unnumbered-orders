@@ -1,12 +1,10 @@
 package com.rw.unnumbered.orders.dto;
 
+import com.rw.unnumbered.orders.dto.request.OrderingInformation;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
 
@@ -66,4 +64,8 @@ public class Order {
     private Passenger passenger;
 
     private List<Ticket> tickets;
+
+    @ApiModelProperty(required = false, value = "JWT токен для авторизации. Заполняется в случае вызова функции покупки билета без авторизации по email")
+    private String jwtToken;
+
 }

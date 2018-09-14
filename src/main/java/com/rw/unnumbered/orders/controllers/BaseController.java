@@ -23,7 +23,6 @@ import java.util.List;
         @ApiResponse(code = 503, message = "Service Unavailable"),
         @ApiResponse(code = 504, message = "Gateway Timeout")
 })
-@PreAuthorize("hasRole('U')")
 public class BaseController {
     public enum ERROR_PREFIX {validation, system, epd}
 

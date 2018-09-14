@@ -3,16 +3,14 @@ package com.rw.unnumbered.orders.service;
 import com.rw.unnumbered.orders.dao.OrderDao;
 import com.rw.unnumbered.orders.dao.TicketDao;
 import com.rw.unnumbered.orders.dto.Order;
-import com.rw.unnumbered.orders.dto.OrderingInformation;
+import com.rw.unnumbered.orders.dto.request.OrderingInformation;
 import com.rw.unnumbered.orders.dto.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +23,11 @@ public class OrderService {
     @Autowired
     TicketDao ticketDao;
 
-    public Order createOrder(@Valid OrderingInformation orderingInformation) {
+    public Order createOrderAuth(@Valid OrderingInformation orderingInformation) {
+        return new Order();
+    }
+
+    public Order createOrderNotAuth(@Valid OrderingInformation orderingInformation, @Valid @NotNull @Email @Size(max=64) String email, @Valid @Size(max=255) String phone) {
         return new Order();
     }
 
