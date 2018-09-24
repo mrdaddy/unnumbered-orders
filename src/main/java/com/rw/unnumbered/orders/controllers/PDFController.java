@@ -24,7 +24,7 @@ public class PDFController extends BaseController {
     @RequestMapping(method = RequestMethod.GET, path = "/{orderId}/tickets/{ticketId}.pdf")
     @ApiOperation(value = "Получение ЭПД в виде PDF-представления", authorizations = @Authorization("jwt-auth"))
     public @ResponseBody
-    ResponseEntity<InputStreamResource> returnTicket(@PathVariable(value = "orderId") @ApiParam(example = "1", value = "Уникальный идентификатор заказа", required = true) long orderId, @PathVariable(value = "ticketId", required = false) @ApiParam(example = "1", value = "Уникальный идентификатор ЭПД", required = true) long ticketId) {
+    ResponseEntity<byte[]> returnTicket(@PathVariable(value = "orderId") @ApiParam(example = "1", value = "Уникальный идентификатор заказа", required = true) long orderId, @PathVariable(value = "ticketId", required = false) @ApiParam(example = "1", value = "Уникальный идентификатор ЭПД", required = true) long ticketId) {
         return pdfService.getTicketPDF(orderId, ticketId);
     }
 }

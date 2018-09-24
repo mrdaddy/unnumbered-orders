@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,9 @@ public class Order {
 
     @ApiModelProperty(example = "12345", required = true, value = "Идентификатор заказа)", dataType = "long")
     private long orderId;
+
+    @ApiModelProperty(example = "ORDER_TYPE", required = true, value = "Тип заказа. Значения: DATE - на дату, TRAIN - на поезд, TRIPS - на количество поездок", dataType = "String")
+    private OrderingInformation.ORDER_TYPE ORDER_TYPE;
 
     @ApiModelProperty(example = "74835926988082", required = false, value = "Идентификатор корзины", dataType = "String")
     private String basketId;

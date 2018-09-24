@@ -5,6 +5,8 @@ import com.rw.unnumbered.orders.dao.TicketDao;
 import com.rw.unnumbered.orders.dto.Order;
 import com.rw.unnumbered.orders.dto.request.OrderingInformation;
 import com.rw.unnumbered.orders.dto.Ticket;
+import com.rw.unnumbered.orders.dto.request.SearchOrderFilter;
+import com.rw.unnumbered.orders.security.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -43,9 +45,13 @@ public class OrderService {
         return new Order();
     }
 
-    public List<Order> getOrders(@Valid @Size(max = 30) String orderType , @Valid Date departureDateMin, @Valid Date departureDateMax, @Valid @Size( max=6) String train,
-                                 @Valid @Size( max=8) String departureStationCode, @Valid @Size( max=8) String  arrivalStationCode) {
-        return orderDao.getOrders(orderType ,departureDateMin, departureDateMax, train, departureStationCode, arrivalStationCode);
+    public List<Order> getOrders(@Valid SearchOrderFilter searchOrderFilter,
+                                 @Valid @NotNull User user) {
+
+        if (searchOrderFilter == null) {
+            searchOrderFilter = SearchOrderFilter.builder().build();
+        }
+        return orderDao.getOrders(searchOrderFilter, user);
     }
 
 }

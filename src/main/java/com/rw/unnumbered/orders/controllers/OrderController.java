@@ -3,6 +3,8 @@ package com.rw.unnumbered.orders.controllers;
 import com.rw.unnumbered.orders.dto.Order;
 import com.rw.unnumbered.orders.dto.request.OrderingInformation;
 import com.rw.unnumbered.orders.dto.Ticket;
+import com.rw.unnumbered.orders.dto.request.SearchOrderFilter;
+import com.rw.unnumbered.orders.security.User;
 import com.rw.unnumbered.orders.service.OrderService;
 import com.rw.unnumbered.orders.validator.OrderingInformationValidator;
 import io.swagger.annotations.*;
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Date;
 import java.util.List;
@@ -87,14 +90,10 @@ public class OrderController extends BaseController {
             @ApiResponse(code = 304, message = "Not Modified")
     })
     @PreAuthorize("hasRole('U')")
-    public List<Order> getOrders(@RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов пользователя по типу заказа. Значение: пусто - все заказы, upcoming - заказы с предстоящими поездками, past - заказы с прошедшими поездками", example = "past", defaultValue = "upcoming", allowableValues = "upcoming, past") String orderType,
-                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с датой отправления больше либо равно указанной", example = "2018-11-12")  @DateTimeFormat(pattern="yyyy-dd-MM") Date departureDateMin,
-                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с датой отправления меньше либо равно указанной", example = "2018-11-22")  @DateTimeFormat(pattern="yyyy-dd-MM") Date departureDateMax,
-                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с указанным поездом", example = "001А")String train,
-                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с указанной станцией отправления", example = "2100276") String departureStationCode,
-                                 @RequestParam(required = false) @ApiParam(value="Фильтр для получения списка заказов с указанной станцией прибытия", example = "2100276") String arrivalStationCode,
-                                 @RequestHeader(name="IF-NONE-MATCH", required = false) @ApiParam(name="IF-NONE-MATCH", value = "ETag из предыдущего закэшированного запроса") String inm) {
-        return orderService.getOrders(orderType ,departureDateMin, departureDateMax, train, departureStationCode, arrivalStationCode);
+    public List<Order> getOrders(@RequestBody(required = false) SearchOrderFilter searchOrderFilter,
+                                 @RequestHeader(name="IF-NONE-MATCH", required = false) @ApiParam(name="IF-NONE-MATCH", value = "ETag из предыдущего закэшированного запроса") String inm,
+                                 @RequestAttribute(value = "user", required = false) @ApiIgnore User user)   {
+        return orderService.getOrders(searchOrderFilter, user);
     }
 
 }
