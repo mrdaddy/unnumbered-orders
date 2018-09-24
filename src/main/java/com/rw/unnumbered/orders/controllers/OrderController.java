@@ -90,7 +90,7 @@ public class OrderController extends BaseController {
             @ApiResponse(code = 304, message = "Not Modified")
     })
     @PreAuthorize("hasRole('U')")
-    public List<Order> getOrders(@RequestBody(required = false) SearchOrderFilter searchOrderFilter,
+    public List<Order> getOrders(@RequestParam(required = false) SearchOrderFilter searchOrderFilter,
                                  @RequestHeader(name="IF-NONE-MATCH", required = false) @ApiParam(name="IF-NONE-MATCH", value = "ETag из предыдущего закэшированного запроса") String inm,
                                  @RequestAttribute(value = "user", required = false) @ApiIgnore User user)   {
         return orderService.getOrders(searchOrderFilter, user);
