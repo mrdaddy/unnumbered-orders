@@ -37,14 +37,17 @@ public class OrderController extends BaseController {
     @ApiOperation(value = "Создание нового заказа авторизованным пользователем", authorizations = @Authorization("jwt-auth"))
     @ResponseStatus( HttpStatus.CREATED)
     @PreAuthorize("hasRole('U')")
-    public Order createOrderAuth(@RequestBody @ApiParam(required = true) OrderingInformation orderingInformation) {
+    public Order createOrderAuth(@RequestBody @ApiParam(required = true) OrderingInformation orderingInformation,
+                                 @RequestAttribute(value = "user", required = false) @ApiIgnore User user) {
         return orderService.createOrderAuth(orderingInformation);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/notauth")
     @ApiOperation(value = "Создание нового заказа неавторизованным пользователем")
     @ResponseStatus( HttpStatus.CREATED)
-    public Order createOrderNotAuth(@RequestBody @ApiParam(required = true) OrderingInformation orderingInformation, @RequestParam @ApiParam(required = true, example = "test@test.com", value = "Email пользователя") String email, @RequestParam @ApiParam(example = "+375295544333", value = "Телефон пользователя") String phone) {
+    public Order createOrderNotAuth(@RequestBody @ApiParam(required = true) OrderingInformation orderingInformation,
+                                    @RequestParam @ApiParam(required = true, example = "test@test.com", value = "Email пользователя") String email,
+                                    @RequestParam @ApiParam(example = "+375295544333", value = "Телефон пользователя") String phone) {
         return orderService.createOrderNotAuth(orderingInformation, email, phone);
     }
 
@@ -54,7 +57,8 @@ public class OrderController extends BaseController {
     @PreAuthorize("hasRole('U')")
     public Ticket activateTicket(@RequestParam(value = "orderId") @ApiParam(example = "1", value = "Уникальный идентификатор заказа", required = true) long orderId,
                                  @RequestParam @ApiParam(example = "2018-01-20", value = "Дата поездки", required = true)  @DateTimeFormat(pattern="yyyy-dd-MM") Date date,
-                                 @RequestParam @ApiParam(example = "001А") String train) {
+                                 @RequestParam @ApiParam(example = "001А") String train,
+                                 @RequestAttribute(value = "user", required = false) @ApiIgnore User user) {
         return orderService.activateTicket(orderId, date, train);
     }
 
@@ -62,7 +66,8 @@ public class OrderController extends BaseController {
     @ApiOperation(value = "Удаление неоплаченного заказа из корзины с аннулированием в системе ЭПД", authorizations = @Authorization("jwt-auth"))
     @ResponseStatus( HttpStatus.ACCEPTED)
     @PreAuthorize("hasRole('U')")
-    public void deleteOrder(@PathVariable("orderId") @ApiParam(value="Уникальный идентификатор заказа", example = "1") long orderId) {
+    public void deleteOrder(@PathVariable("orderId") @ApiParam(value="Уникальный идентификатор заказа", example = "1") long orderId,
+                            @RequestAttribute(value = "user", required = false) @ApiIgnore User user) {
         orderService.deleteOrder(orderId);
     }
 
@@ -75,8 +80,10 @@ public class OrderController extends BaseController {
                             @ResponseHeader(name = "ETag", response = String.class, description = "Хеш для кэширования")}),
             @ApiResponse(code = 304, message = "Not Modified")
     })
-    @PreAuthorize("hasRole('U')")
-    public Order getOrder(@PathVariable("orderId") @ApiParam(value="Уникальный идентификатор  заказа", example = "1") long orderId, @RequestHeader(name="IF-NONE-MATCH", required = false) @ApiParam(name="IF-NONE-MATCH", value = "ETag из предыдущего закэшированного запроса") String inm) {
+    @PreAuthorize("hasRole('U') or hasRole('L')")
+    public Order getOrder(@PathVariable("orderId") @ApiParam(value="Уникальный идентификатор  заказа", example = "1") long orderId,
+                          @RequestHeader(name="IF-NONE-MATCH", required = false) @ApiParam(name="IF-NONE-MATCH", value = "ETag из предыдущего закэшированного запроса") String inm,
+                          @RequestAttribute(value = "user", required = false) @ApiIgnore User user) {
         return orderService.getOrder(orderId);
     }
 
@@ -89,7 +96,7 @@ public class OrderController extends BaseController {
                             @ResponseHeader(name = "ETag", response = String.class, description = "Хеш для кэширования")}),
             @ApiResponse(code = 304, message = "Not Modified")
     })
-    @PreAuthorize("hasRole('U')")
+    @PreAuthorize("hasRole('U') or hasRole('L')")
     public List<Order> getOrders(@RequestParam(required = false) SearchOrderFilter searchOrderFilter,
                                  @RequestHeader(name="IF-NONE-MATCH", required = false) @ApiParam(name="IF-NONE-MATCH", value = "ETag из предыдущего закэшированного запроса") String inm,
                                  @RequestAttribute(value = "user", required = false) @ApiIgnore User user)   {

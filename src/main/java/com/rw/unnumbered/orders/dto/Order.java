@@ -42,7 +42,7 @@ public class Order {
     @ApiModelProperty(example = "2100276", required = true, value = "Код станции назначения", dataType = "String")
     private String arrStationCode;
 
-    @ApiModelProperty(example = "THERE", required = false, value = "Направление. Значения: THERE - туда, BACK - обратно. Поддерживается только THERE, можно не заполнять", dataType = "String")
+    @ApiModelProperty(example = "TO", required = false, value = "Направление. Значения: TO - туда, BACK - обратно. Поддерживается только TO", dataType = "String")
     private OrderingInformation.DIRECTION directionType;
 
     @ApiModelProperty(example = "REG_LINE", required = true, value = "Тип поезда. Значения: REG_LINE - региональные линии эконом-класса, CITY_LINE - городские линии", dataType = "String")
