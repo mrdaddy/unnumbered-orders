@@ -65,9 +65,9 @@ public class OrderController extends BaseController {
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{orderId}")
     @ApiOperation(value = "Удаление неоплаченного заказа из корзины с аннулированием в системе ЭПД", authorizations = @Authorization("jwt-auth"))
-    @ResponseStatus( HttpStatus.ACCEPTED)
+    @ResponseStatus( HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('U')")
-    public void deleteOrder(@PathVariable("orderId") @ApiParam(value="Уникальный идентификатор заказа", example = "1") long orderId,
+    public void deleteOrder(@PathVariable("orderId") @ApiParam(value="Уникальный идентификатор заказа", example = "1", required = true) long orderId,
                             @RequestAttribute(value = "user", required = false) @ApiIgnore User user) {
         orderService.deleteOrder(orderId);
     }
@@ -82,7 +82,7 @@ public class OrderController extends BaseController {
             @ApiResponse(code = 304, message = "Not Modified")
     })
     @PreAuthorize("hasRole('U') or hasRole('L')")
-    public Order getOrder(@PathVariable("orderId") @ApiParam(value="Уникальный идентификатор  заказа", example = "1") long orderId,
+    public Order getOrder(@PathVariable("orderId") @ApiParam(value="Уникальный идентификатор  заказа", example = "1", required = true) long orderId,
                           @RequestHeader(name="IF-NONE-MATCH", required = false) @ApiParam(name="IF-NONE-MATCH", value = "ETag из предыдущего закэшированного запроса") String inm,
                           @RequestAttribute(value = "user", required = false) @ApiIgnore User user) {
         return orderService.getOrder(orderId);
