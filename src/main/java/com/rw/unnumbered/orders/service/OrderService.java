@@ -3,6 +3,7 @@ package com.rw.unnumbered.orders.service;
 import com.rw.unnumbered.orders.dao.OrderDao;
 import com.rw.unnumbered.orders.dao.TicketDao;
 import com.rw.unnumbered.orders.dto.Order;
+import com.rw.unnumbered.orders.dto.ShortOrder;
 import com.rw.unnumbered.orders.dto.request.OrderingInformation;
 import com.rw.unnumbered.orders.dto.Ticket;
 import com.rw.unnumbered.orders.dto.request.SearchOrderFilter;
@@ -45,8 +46,8 @@ public class OrderService {
         return new Order();
     }
 
-    public List<Order> getOrders(@Valid SearchOrderFilter searchOrderFilter,
-                                 @Valid @NotNull User user) {
+    public List<ShortOrder> getOrders(@Valid SearchOrderFilter searchOrderFilter,
+                                      @Valid @NotNull User user) {
 
         if (searchOrderFilter == null) {
             searchOrderFilter = SearchOrderFilter.builder().build();

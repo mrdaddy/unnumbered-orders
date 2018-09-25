@@ -1,6 +1,7 @@
 package com.rw.unnumbered.orders.controllers;
 
 import com.rw.unnumbered.orders.dto.Order;
+import com.rw.unnumbered.orders.dto.ShortOrder;
 import com.rw.unnumbered.orders.dto.request.OrderingInformation;
 import com.rw.unnumbered.orders.dto.Ticket;
 import com.rw.unnumbered.orders.dto.request.SearchOrderFilter;
@@ -28,8 +29,8 @@ public class OrderController extends BaseController {
     @Autowired
     OrderService orderService;
 
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
+    @InitBinder("orderingInformation")
+    protected void initOrderingInformationBinder(WebDataBinder binder) {
         binder.addValidators(new OrderingInformationValidator());
     }
 
@@ -97,9 +98,9 @@ public class OrderController extends BaseController {
             @ApiResponse(code = 304, message = "Not Modified")
     })
     @PreAuthorize("hasRole('U') or hasRole('L')")
-    public List<Order> getOrders(@RequestParam(required = false) SearchOrderFilter searchOrderFilter,
-                                 @RequestHeader(name="IF-NONE-MATCH", required = false) @ApiParam(name="IF-NONE-MATCH", value = "ETag из предыдущего закэшированного запроса") String inm,
-                                 @RequestAttribute(value = "user", required = false) @ApiIgnore User user)   {
+    public List<ShortOrder> getOrders(@ApiParam(name="searchOrderFilter", required = false) SearchOrderFilter searchOrderFilter,
+                                      @RequestHeader(name="IF-NONE-MATCH", required = false) @ApiParam(name="IF-NONE-MATCH", value = "ETag из предыдущего закэшированного запроса") String inm,
+                                      @RequestAttribute(value = "user", required = false) @ApiIgnore User user)   {
         return orderService.getOrders(searchOrderFilter, user);
     }
 

@@ -1,6 +1,7 @@
 package com.rw.unnumbered.orders.dao;
 
 import com.rw.unnumbered.orders.dto.Order;
+import com.rw.unnumbered.orders.dto.ShortOrder;
 import com.rw.unnumbered.orders.dto.request.SearchOrderFilter;
 import com.rw.unnumbered.orders.security.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class OrderDao {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public List<Order> getOrders(SearchOrderFilter searchOrderFilter, User user) {
-        List<Order> orders = new ArrayList<>();
+    public List<ShortOrder> getOrders(SearchOrderFilter searchOrderFilter, User user) {
+        List<ShortOrder> orders = new ArrayList<>();
         orders.add(new Order());
         return orders;
     }
