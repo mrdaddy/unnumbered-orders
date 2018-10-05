@@ -1,5 +1,8 @@
 package com.rw.unnumbered.orders;
 
+import io.jaegertracing.Configuration;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -22,6 +25,13 @@ public class OrdersApplication {
         frb.addUrlPatterns("/");
         frb.setOrder(2);
         return frb;
+    }
+
+    @Bean
+    public boolean configureGlobalTracer()	{
+        Tracer tracer = Configuration.fromEnv().getTracer();
+        GlobalTracer.register(tracer);
+        return true;
     }
 
 }
